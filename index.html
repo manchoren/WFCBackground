@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Wave Function Collapse with Image Pattern</title>
+        
+        
+        <script src="ndwfc.js"></script>
+        <script src="ndwfc-tools.js"></script>
+        
+    </head>
+    <body>
+        <script>
+            // initialize the 2d tool
+            var tool = new WFCTool2D();
+
+ // dont add tabs, it will break the tile
+tool.addTile(`\
+.@.
+.@@
+...`, {weight: 10})
+ 
+tool.addTile(`\
+.@.
+.@.
+.@.`,
+{transformations:['cw'], weight: 10})
+
+
+
+ 
+            tool.addColor("@", [0,0,0])
+            tool.addColor(".", [40,100,100])
+
+            console.log("tool.getTileFormulae()");
+            console.log(tool.getTileFormulae());
+
+            var wfcInput = tool.generateWFCInput();
+            var wfc = new WFC(wfcInput);
+
+            console.log("wfcInput");
+            console.log(wfcInput);
+
+            // visualize the output on a HTML canvas
+            var canvas = document.createElement("canvas");
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            canvas.style.position = "absolute";
+            canvas.style.left = "0px";
+            canvas.style.top = "0px";
+            canvas.style.display="block";
+            document.body.appendChild(canvas);
+           
+            var size = 20;
+            var viewport = {x:0,y:0,w:size,h:size}; 
+
+            wfc.expand([-size,-size],[size,size]);  
+
+            
+            while ( !wfc.step()){ 
+                console.log('.');
+            } 
+
+            tool.plotWFCOutput(canvas, viewport, wfc.readout()); 
+           
+            
+        </script>
+    </body>
+</html>
